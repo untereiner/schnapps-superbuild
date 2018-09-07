@@ -12,7 +12,7 @@ foreach(CACHE_VAR ${CACHE_VARS})
     else()
       set(CACHE_VAR_TYPE :${CACHE_VAR_TYPE})
     endif()
-    set(CMAKE_ARGS "${CMAKE_ARGS} -D${CACHE_VAR}${CACHE_VAR_TYPE}=\"${${CACHE_VAR}}\"")
+    list(APPEND CMAKE_ARGS "\"${${CACHE_VAR}}\"")
   endif()
 endforeach()
 message("CMAKE_ARGS: ${CMAKE_ARGS}")
@@ -30,6 +30,7 @@ set(installDir ${CMAKE_CURRENT_BINARY_DIR}/install)
 set(sourceDir ${CMAKE_CURRENT_SOURCE_DIR})
 
 
+list(GET CMAKE_ARGS 1 qt5_dir)
 
 ExternalProject_Add(cgogn
   SOURCE_DIR ${sourceDir}/cgogn
