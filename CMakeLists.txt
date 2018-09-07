@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.0)
 
+set(qt5_dir ${Qt5_DIR})
+
+message(STATUS qt5_dir)
+
+
 project(schnapps-superbuild)
 
 #### Here are located the FindPackages that we need
@@ -11,9 +16,7 @@ include(ExternalProject)
 set(installDir ${CMAKE_CURRENT_BINARY_DIR}/install)
 set(sourceDir ${CMAKE_CURRENT_SOURCE_DIR})
 
-set(qt5_dir ${Qt5_DIR})
 
-message(STATUS qt5_dir)
 
 ExternalProject_Add(cgogn
   SOURCE_DIR ${sourceDir}/cgogn
