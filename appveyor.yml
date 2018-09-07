@@ -46,7 +46,6 @@ init:
   - echo %GENERATOR%
   - echo %QT_DIR%
 
-
 build_script:
   - md build
   - cd build
@@ -54,9 +53,8 @@ build_script:
   - cmake --build . --config "%CONFIGURATION%" -- /verbosity:minimal
   - cmake --build . --config "%CONFIGURATION%" --target INSTALL -- /verbosity:minimal
   - cmake --build . --config "%CONFIGURATION%" --target PACKAGE -- /verbosity:minimal
-  #- cpack
 
-#artifacts:
-#  - path: build/schnapps-install.exe
-#    name: schnapps-Windows-install
+artifacts:
+  - path: build/schnapps-install.exe
+    name: schnapps-Windows-install
 

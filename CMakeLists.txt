@@ -71,27 +71,27 @@ ExternalProject_Add_StepDependencies(schnapps install cgogn)
 
 
 
-	find_package(Qt5Core REQUIRED)
-	get_target_property(_qmake_executable Qt5::qmake IMPORTED_LOCATION)
-	get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
-	find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS "${_qt_bin_dir}")
-	if(APPLE AND NOT MACDEPLOYQT_EXECUTABLE)
-	    message(FATAL_ERROR "macdeployqt not found")
-	else()
-		message(STATUS "${MACDEPLOYQT_EXECUTABLE}")
-	endif()
+	# find_package(Qt5Core REQUIRED)
+	# get_target_property(_qmake_executable Qt5::qmake IMPORTED_LOCATION)
+	# get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
+	# find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS "${_qt_bin_dir}")
+	# if(APPLE AND NOT MACDEPLOYQT_EXECUTABLE)
+	#     message(FATAL_ERROR "macdeployqt not found")
+	# else()
+	# 	message(STATUS "${MACDEPLOYQT_EXECUTABLE}")
+	# endif()
 
     
-    ExternalProject_Add_Step(schnapps post_build 
-    	COMMENT "Deploying Qt... "
-    	DEPENDEES build 
-    	#DEPENDERS install
-    	COMMAND ${MACDEPLOYQT_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/install/bin/schnapps.app -always-overwrite
-    )
+ #    ExternalProject_Add_Step(schnapps post_build 
+ #    	COMMENT "Deploying Qt... "
+ #    	DEPENDEES build 
+ #    	#DEPENDERS install
+ #    	COMMAND ${MACDEPLOYQT_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/install/bin/schnapps.app -always-overwrite
+ #    )
 
 # Packaging stuff
 #include(InstallRequiredSystemLibraries)
-#add_subdirectory(packaging)
+add_subdirectory(packaging)
 
 
 
