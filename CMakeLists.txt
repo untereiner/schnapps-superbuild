@@ -46,7 +46,7 @@ ExternalProject_Add(cgogn
     -DCMAKE_BUILD_TYPE:STRING=${BUILD_TYPE}
     -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
     -DCMAKE_PREFIX_PATH:PATH=<INSTALL_DIR>
-    -DQt5_DIR:PATH=<qt5_dir>
+    -DQt5_DIR:PATH=${qt5_dir}
     #-DBUILD_SHARED_LIBS:BOOL=ON 
 )
 
@@ -64,7 +64,7 @@ ExternalProject_Add(schnapps
     -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
     -DCMAKE_PREFIX_PATH:PATH=<INSTALL_DIR>
     #-DCMAKE_INSTALL_NAME_DIR:STRING=@executable_path/lib/
-    -DQt5_DIR:PATH=<qt5_dir>
+    -DQt5_DIR:PATH=${qt5_dir}
  	-DUSE_PLUGIN_attribute_editor:BOOL=OFF
  	-DUSE_PLUGIN_cage_3d_deformation:BOOL=OFF
  	-DUSE_PLUGIN_empty_plugin:BOOL=ON
