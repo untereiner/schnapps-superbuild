@@ -1,0 +1,62 @@
+#---------------------------------#
+#      general configuration      #
+#---------------------------------#
+
+# version format
+version: 1.0.{build}
+
+branches:
+  only:
+    - master
+
+skip_commits:
+  message: /\[skip ci\]|\[ci skip\]|\[skip appveyor\]|\[ci appveyor\]/
+  files:
+    - .travis*
+    - data/
+    - '*.md'
+
+clone_folder: c:\projects\myproject
+
+# fetch repository as zip archive
+shallow_clone: true 
+
+image:
+  #- Visual Studio 2015
+  - Visual Studio 2017
+
+configuration:
+  - Release
+  #- Debug
+
+environment:
+  matrix:
+    - arch: Win64
+
+build:
+  parallel: true
+  verbosity: minimal
+
+init:
+  - echo %arch%
+  - echo %APPVEYOR_BUILD_WORKER_IMAGE%
+  - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" (set GENERATOR="Visual Studio 15 2017 %arch%" && set QT_DIR="C:\Qt\5.10.1\msvc2017_64\lib\cmake\Qt5")
+  #- if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" (set GENERATOR="Visual Studio 14 2015 %arch%" && set QT_DIR="C:\Qt\5.10.1\msvc2015_64\lib\cmake\Qt5")
+  #- if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2013" (set GENERATOR="Visual Studio 12 2013 %arch%" && set QT_DIR="C:\Qt\5.8\msvc2013_64\lib\cmake\Qt5")
+  - echo %GENERATOR%
+  - echo %QT_DIR%
+
+
+build_script:
+  - md build
+  - cd build
+  - cmake -Wno-dev -Wno-deprecated -G %GENERATOR% .. -DCMAKE_SUPPRESS_REGENERATION=1 -DQt5_DIR=%QT_DIR%
+  - cmake --build . --config "%CONFIGURATION%" -- /verbosity:minimal
+  - cmake --build . --config "%CONFIGURATION%" --target INSTALL -- /verbosity:minimal
+  - cmake --build . --config "%CONFIGURATION%" --target PACKAGE -- /verbosity:minimal
+  #- cpack
+
+#artifacts:
+#  - path: build/schnapps-install.exe
+#    name: schnapps-Windows-install
+
