@@ -142,8 +142,8 @@ ExternalProject_Add(schnapps
 ExternalProject_Add_StepDependencies(schnapps install cgogn)
 
 
-
-set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${schnapps};ALL;/")
+set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${CMAKE_BINARY_DIR}/cgogn-build;cgogn;ALL;/")
+set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${CMAKE_BINARY_DIR}/schnapps-build;schnapps;ALL;/")
 set(CPACK_GENERATOR "WIX")
 
 include(CPack)
