@@ -31,10 +31,10 @@ ExternalProject_Add(schnapps
   BINARY_DIR ${CMAKE_BINARY_DIR}/schnapps-build
   INSTALL_DIR ${installDir}
 
-  #GIT_REPOSITORY https://github.com/untereiner/SCHNApps.git
-  #GIT_REMOTE_NAME origin
-  #GIT_TAG cmake
-  URL /Users/untereiner/Documents/Developments/cgogn2/SCHNApps/
+  GIT_REPOSITORY https://github.com/untereiner/SCHNApps.git
+  GIT_REMOTE_NAME origin
+  GIT_TAG cmake
+  #URL /Users/untereiner/Documents/Developments/cgogn2/SCHNApps/
   CMAKE_ARGS
     -DCMAKE_BUILD_TYPE:STRING=${BUILD_TYPE}
     -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
