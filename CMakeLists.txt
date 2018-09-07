@@ -11,6 +11,10 @@ include(ExternalProject)
 set(installDir ${CMAKE_CURRENT_BINARY_DIR}/install)
 set(sourceDir ${CMAKE_CURRENT_SOURCE_DIR})
 
+set(qt5_dir ${Qt5_DIR})
+
+message(STATUS qt5_dir)
+
 ExternalProject_Add(cgogn
   SOURCE_DIR ${sourceDir}/cgogn
   BINARY_DIR ${CMAKE_BINARY_DIR}/cgogn-build
@@ -23,7 +27,7 @@ ExternalProject_Add(cgogn
     -DCMAKE_BUILD_TYPE:STRING=${BUILD_TYPE}
     -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
     -DCMAKE_PREFIX_PATH:PATH=<INSTALL_DIR>
-    -DQt5_DIR="C:\\Qt\\5.10.1\\msvc2017_64\\lib\\cmake\\Qt5"
+    -DQt5_DIR:PATH=qt5_dir
     #-DBUILD_SHARED_LIBS:BOOL=ON 
 )
 
@@ -41,7 +45,7 @@ ExternalProject_Add(schnapps
     -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
     -DCMAKE_PREFIX_PATH:PATH=<INSTALL_DIR>
     #-DCMAKE_INSTALL_NAME_DIR:STRING=@executable_path/lib/
-    -DQt5_DIR="C:\\Qt\\5.10.1\\msvc2017_64\\lib\\cmake\\Qt5"
+    -DQt5_DIR:PATH=qt5_dir
  	-DUSE_PLUGIN_attribute_editor:BOOL=OFF
  	-DUSE_PLUGIN_cage_3d_deformation:BOOL=OFF
  	-DUSE_PLUGIN_empty_plugin:BOOL=ON
