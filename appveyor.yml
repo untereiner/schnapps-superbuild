@@ -51,7 +51,7 @@ build_script:
   - cd build
   - cmake -Wno-dev -Wno-deprecated -G %GENERATOR% .. -DCMAKE_SUPPRESS_REGENERATION=1 -DQt5_DIR=%QT_DIR%
   #- cmake --build . --config "%CONFIGURATION%" -- /verbosity:minimal
-  #- cmake --build . --config "%CONFIGURATION%" --target INSTALL -- /verbosity:minimal
+  - cmake --build . --config "%CONFIGURATION%" --target INSTALL -- /verbosity:minimal
   - cmake --build . --config "%CONFIGURATION%" --target PACKAGE -- /verbosity:minimal
 
 artifacts:
