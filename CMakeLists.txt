@@ -1,22 +1,74 @@
 cmake_minimum_required(VERSION 3.0)
 
 
+function(dict command dict )
+    if(command STREQUAL SET)
+        set(arg_key ${ARGV2})
+        set(arg_value ${ARGV3})
 
-get_cmake_property(CACHE_VARS CACHE_VARIABLES)
-foreach(CACHE_VAR ${CACHE_VARS})
-  get_property(CACHE_VAR_HELPSTRING CACHE ${CACHE_VAR} PROPERTY HELPSTRING)
-  if(CACHE_VAR_HELPSTRING STREQUAL "No help, variable specified on the command line.")
-    get_property(CACHE_VAR_TYPE CACHE ${CACHE_VAR} PROPERTY TYPE)
-    if(CACHE_VAR_TYPE STREQUAL "UNINITIALIZED")
-      set(CACHE_VAR_TYPE)
+        dict(_IDX ${dict} "${arg_key}" idx)
+        if(NOT idx STREQUAL -1)
+            list(REMOVE_AT ${dict} ${idx})
+        endif()
+
+        list(APPEND ${dict} "${arg_key}=${arg_value}")
+        set(${dict} "${${dict}}" PARENT_SCOPE)
+
+    elseif(command STREQUAL GET)
+        set(arg_key ${ARGV2})
+        set(arg_outvar ${ARGV3})
+
+        dict(_IDX ${dict} "${arg_key}" idx)
+        if(idx STREQUAL -1)
+            message(FATAL_ERROR "No key \"${arg_key}\" in dictionary")
+        endif()
+
+        list(GET ${dict} ${idx} kv)
+        string(REGEX REPLACE "^[^=]+=(.*)" "\\1" value "${kv}")
+        set(${arg_outvar} "${value}" PARENT_SCOPE)
+
+    elseif(command STREQUAL _IDX)
+        set(arg_key ${ARGV2})
+        set(arg_outvar ${ARGV3})
+        set(idx 0)
+        foreach(kv IN LISTS ${dict})
+            string(REGEX REPLACE "^([^=]+)=.*" "\\1" key "${kv}")
+            if(arg_key STREQUAL key)
+                set(${arg_outvar} "${idx}" PARENT_SCOPE)
+                return()
+            endif()
+            math(EXPR idx ${idx}+1)
+        endforeach()
+        set(${arg_outvar} "-1" PARENT_SCOPE)
+
     else()
-      set(CACHE_VAR_TYPE :${CACHE_VAR_TYPE})
+        message(FATAL_ERROR "dict does not recognize sub-command ${command}")
     endif()
-    list(APPEND CMAKE_ARGS "${${CACHE_VAR}}")
-  endif()
-endforeach()
-message("CMAKE_ARGS: ${CMAKE_ARGS}")
+endfunction()
 
+function(get_cached_variables mydict)
+	get_cmake_property(CACHE_VARS CACHE_VARIABLES)
+	foreach(CACHE_VAR ${CACHE_VARS})
+	  get_property(CACHE_VAR_HELPSTRING CACHE ${CACHE_VAR} PROPERTY HELPSTRING)
+	  if(CACHE_VAR_HELPSTRING STREQUAL "No help, variable specified on the command line.")
+	    #get_property(CACHE_VAR_TYPE CACHE ${CACHE_VAR} PROPERTY TYPE)
+	    # if(CACHE_VAR_TYPE STREQUAL "UNINITIALIZED")
+	    #   set(CACHE_VAR_TYPE)
+	    # else()
+	    #   set(CACHE_VAR_TYPE :${CACHE_VAR_TYPE})
+	    # endif()
+	    #list(APPEND values "${${CACHE_VAR}}")
+	    #list(APPEND keys "${CACHE_VAR}") #"${CACHE_VAR}${CACHE_VAR_TYPE}=\"${${CACHE_VAR}}\"")
+	    dict(SET mydict "${CACHE_VAR}" "${${CACHE_VAR}}" )
+	  endif()
+	endforeach()
+	set(${mydict} PARENT_SCOPE)
+endfunction()
+
+
+
+get_cached_variables(mydict)
+dict(GET mydict "Qt5_DIR" qt5_dir)
 
 project(schnapps-superbuild)
 
@@ -28,11 +80,6 @@ include(ExternalProject)
 
 set(installDir ${CMAKE_CURRENT_BINARY_DIR}/install)
 set(sourceDir ${CMAKE_CURRENT_SOURCE_DIR})
-
-
-list(GET CMAKE_ARGS 1 qt5_dir)
-
-message(STATUS "QT5: ${qt5_dir}")
 
 ExternalProject_Add(cgogn
   SOURCE_DIR ${sourceDir}/cgogn
@@ -87,8 +134,8 @@ ExternalProject_Add(schnapps
 	-DUSE_PLUGIN_volume_modelisation:BOOL=OFF
 	-DUSE_PLUGIN_volume_render:BOOL=OFF
     #-DBUILD_SHARED_LIBS:BOOL=ON 
-    -DUSE_PLUGIN_area_of_interest:BOOL=OFF
- 	-DUSE_PLUGIN_data_preprocessing:BOOL=OFF
+    #-DUSE_PLUGIN_area_of_interest:BOOL=OFF
+ 	#-DUSE_PLUGIN_data_preprocessing:BOOL=OFF
 )
 
 
