@@ -142,6 +142,12 @@ ExternalProject_Add(schnapps
 ExternalProject_Add_StepDependencies(schnapps install cgogn)
 
 
+# ExternalProject_Add_Step(schnapps package
+#     COMMAND "cpack"
+#     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+#     COMMENT "Package with cpack"
+#     DEPENDEES "install"
+#  )
 
 	# find_package(Qt5Core REQUIRED)
 	# get_target_property(_qmake_executable Qt5::qmake IMPORTED_LOCATION)
