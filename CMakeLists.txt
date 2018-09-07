@@ -142,6 +142,13 @@ ExternalProject_Add(schnapps
 ExternalProject_Add_StepDependencies(schnapps install cgogn)
 
 
+
+set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${schnapps};ALL;/")
+set(CPACK_GENERATOR "TGZ")
+
+include(CPack)
+
+
 # ExternalProject_Add_Step(schnapps package
 #     COMMAND "cpack"
 #     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -169,7 +176,7 @@ ExternalProject_Add_StepDependencies(schnapps install cgogn)
 
 # Packaging stuff
 #include(InstallRequiredSystemLibraries)
-add_subdirectory(packaging)
+#add_subdirectory(packaging)
 
 
 
