@@ -86,9 +86,9 @@ ExternalProject_Add(cgogn
   BINARY_DIR ${CMAKE_BINARY_DIR}/cgogn-build
   INSTALL_DIR ${installDir}
 
-  GIT_REPOSITORY https://github.com/cgogn/CGoGN_2.git
+  GIT_REPOSITORY https://github.com/untereiner/CGoGN_2.git
   GIT_REMOTE_NAME origin
-  GIT_TAG develop
+  GIT_TAG cmake
   CMAKE_ARGS
     -DCMAKE_BUILD_TYPE:STRING=${BUILD_TYPE}
     -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
@@ -146,47 +146,17 @@ set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${CMAKE_BINARY
 set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${CMAKE_BINARY_DIR}/schnapps-build;schnapps;ALL;/")
 set(CPACK_GENERATOR "WIX")
 
+set(CPACK_PACKAGE_CONTACT "Lionel <lionel@plop.org>" )
 set(CPACK_PACKAGE_NAME "SCHNApps")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "$PROGRAMFILES64")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A geometric modeling tool based on combinatorial maps")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Modeleur geometrique")
 set(CPACK_PACKAGE_VENDOR "geosiris.com")
 set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-installer")
 
+set(CPACK_WIX_PROGRAM_MENU_FOLDER "SCHNApps")
+
 include(CPack)
-
-
-# ExternalProject_Add_Step(schnapps package
-#     COMMAND "cpack"
-#     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-#     COMMENT "Package with cpack"
-#     DEPENDEES "install"
-#  )
-
-	# find_package(Qt5Core REQUIRED)
-	# get_target_property(_qmake_executable Qt5::qmake IMPORTED_LOCATION)
-	# get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
-	# find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS "${_qt_bin_dir}")
-	# if(APPLE AND NOT MACDEPLOYQT_EXECUTABLE)
-	#     message(FATAL_ERROR "macdeployqt not found")
-	# else()
-	# 	message(STATUS "${MACDEPLOYQT_EXECUTABLE}")
-	# endif()
-
-    
- #    ExternalProject_Add_Step(schnapps post_build 
- #    	COMMENT "Deploying Qt... "
- #    	DEPENDEES build 
- #    	#DEPENDERS install
- #    	COMMAND ${MACDEPLOYQT_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/install/bin/schnapps.app -always-overwrite
- #    )
-
-# Packaging stuff
-#include(InstallRequiredSystemLibraries)
-#add_subdirectory(packaging)
-
-
-
-
-#include(packaging/DeployQt.cmake)
 
 
 
