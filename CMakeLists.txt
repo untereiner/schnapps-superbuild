@@ -1,74 +1,74 @@
 cmake_minimum_required(VERSION 3.0)
 
 
-function(dict command dict )
-    if(command STREQUAL SET)
-        set(arg_key ${ARGV2})
-        set(arg_value ${ARGV3})
+# function(dict command dict )
+#     if(command STREQUAL SET)
+#         set(arg_key ${ARGV2})
+#         set(arg_value ${ARGV3})
 
-        dict(_IDX ${dict} "${arg_key}" idx)
-        if(NOT idx STREQUAL -1)
-            list(REMOVE_AT ${dict} ${idx})
-        endif()
+#         dict(_IDX ${dict} "${arg_key}" idx)
+#         if(NOT idx STREQUAL -1)
+#             list(REMOVE_AT ${dict} ${idx})
+#         endif()
 
-        list(APPEND ${dict} "${arg_key}=${arg_value}")
-        set(${dict} "${${dict}}" PARENT_SCOPE)
+#         list(APPEND ${dict} "${arg_key}=${arg_value}")
+#         set(${dict} "${${dict}}" PARENT_SCOPE)
 
-    elseif(command STREQUAL GET)
-        set(arg_key ${ARGV2})
-        set(arg_outvar ${ARGV3})
+#     elseif(command STREQUAL GET)
+#         set(arg_key ${ARGV2})
+#         set(arg_outvar ${ARGV3})
 
-        dict(_IDX ${dict} "${arg_key}" idx)
-        if(idx STREQUAL -1)
-            message(FATAL_ERROR "No key \"${arg_key}\" in dictionary")
-        endif()
+#         dict(_IDX ${dict} "${arg_key}" idx)
+#         if(idx STREQUAL -1)
+#             message(FATAL_ERROR "No key \"${arg_key}\" in dictionary")
+#         endif()
 
-        list(GET ${dict} ${idx} kv)
-        string(REGEX REPLACE "^[^=]+=(.*)" "\\1" value "${kv}")
-        set(${arg_outvar} "${value}" PARENT_SCOPE)
+#         list(GET ${dict} ${idx} kv)
+#         string(REGEX REPLACE "^[^=]+=(.*)" "\\1" value "${kv}")
+#         set(${arg_outvar} "${value}" PARENT_SCOPE)
 
-    elseif(command STREQUAL _IDX)
-        set(arg_key ${ARGV2})
-        set(arg_outvar ${ARGV3})
-        set(idx 0)
-        foreach(kv IN LISTS ${dict})
-            string(REGEX REPLACE "^([^=]+)=.*" "\\1" key "${kv}")
-            if(arg_key STREQUAL key)
-                set(${arg_outvar} "${idx}" PARENT_SCOPE)
-                return()
-            endif()
-            math(EXPR idx ${idx}+1)
-        endforeach()
-        set(${arg_outvar} "-1" PARENT_SCOPE)
+#     elseif(command STREQUAL _IDX)
+#         set(arg_key ${ARGV2})
+#         set(arg_outvar ${ARGV3})
+#         set(idx 0)
+#         foreach(kv IN LISTS ${dict})
+#             string(REGEX REPLACE "^([^=]+)=.*" "\\1" key "${kv}")
+#             if(arg_key STREQUAL key)
+#                 set(${arg_outvar} "${idx}" PARENT_SCOPE)
+#                 return()
+#             endif()
+#             math(EXPR idx ${idx}+1)
+#         endforeach()
+#         set(${arg_outvar} "-1" PARENT_SCOPE)
 
-    else()
-        message(FATAL_ERROR "dict does not recognize sub-command ${command}")
-    endif()
-endfunction()
+#     else()
+#         message(FATAL_ERROR "dict does not recognize sub-command ${command}")
+#     endif()
+# endfunction()
 
-function(get_cached_variables mydict)
-	get_cmake_property(CACHE_VARS CACHE_VARIABLES)
-	foreach(CACHE_VAR ${CACHE_VARS})
-	  get_property(CACHE_VAR_HELPSTRING CACHE ${CACHE_VAR} PROPERTY HELPSTRING)
-	  if(CACHE_VAR_HELPSTRING STREQUAL "No help, variable specified on the command line.")
-	    #get_property(CACHE_VAR_TYPE CACHE ${CACHE_VAR} PROPERTY TYPE)
-	    # if(CACHE_VAR_TYPE STREQUAL "UNINITIALIZED")
-	    #   set(CACHE_VAR_TYPE)
-	    # else()
-	    #   set(CACHE_VAR_TYPE :${CACHE_VAR_TYPE})
-	    # endif()
-	    #list(APPEND values "${${CACHE_VAR}}")
-	    #list(APPEND keys "${CACHE_VAR}") #"${CACHE_VAR}${CACHE_VAR_TYPE}=\"${${CACHE_VAR}}\"")
-	    dict(SET mydict "${CACHE_VAR}" "${${CACHE_VAR}}" )
-	  endif()
-	endforeach()
-	set(${mydict} PARENT_SCOPE)
-endfunction()
+# function(get_cached_variables mydict)
+# 	get_cmake_property(CACHE_VARS CACHE_VARIABLES)
+# 	foreach(CACHE_VAR ${CACHE_VARS})
+# 	  get_property(CACHE_VAR_HELPSTRING CACHE ${CACHE_VAR} PROPERTY HELPSTRING)
+# 	  if(CACHE_VAR_HELPSTRING STREQUAL "No help, variable specified on the command line.")
+# 	    #get_property(CACHE_VAR_TYPE CACHE ${CACHE_VAR} PROPERTY TYPE)
+# 	    # if(CACHE_VAR_TYPE STREQUAL "UNINITIALIZED")
+# 	    #   set(CACHE_VAR_TYPE)
+# 	    # else()
+# 	    #   set(CACHE_VAR_TYPE :${CACHE_VAR_TYPE})
+# 	    # endif()
+# 	    #list(APPEND values "${${CACHE_VAR}}")
+# 	    #list(APPEND keys "${CACHE_VAR}") #"${CACHE_VAR}${CACHE_VAR_TYPE}=\"${${CACHE_VAR}}\"")
+# 	    dict(SET mydict "${CACHE_VAR}" "${${CACHE_VAR}}" )
+# 	  endif()
+# 	endforeach()
+# 	set(${mydict} PARENT_SCOPE)
+# endfunction()
 
 
 
-get_cached_variables(mydict)
-dict(GET mydict "Qt5_DIR" qt5_dir)
+# get_cached_variables(mydict)
+# dict(GET mydict "Qt5_DIR" qt5_dir)
 
 project(schnapps-superbuild)
 
@@ -80,6 +80,7 @@ include(ExternalProject)
 
 set(installDir ${CMAKE_CURRENT_BINARY_DIR}/install)
 set(sourceDir ${CMAKE_CURRENT_SOURCE_DIR})
+set(myqt5_dir ${Qt5_DIR})
 
 ExternalProject_Add(cgogn
   SOURCE_DIR ${sourceDir}/cgogn
@@ -93,7 +94,7 @@ ExternalProject_Add(cgogn
     -DCMAKE_BUILD_TYPE:STRING=${BUILD_TYPE}
     -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
     -DCMAKE_PREFIX_PATH:PATH=<INSTALL_DIR>
-    -DQt5_DIR:PATH=${qt5_dir}
+    -DQt5_DIR:PATH=${myqt5_dir}
     #-DBUILD_SHARED_LIBS:BOOL=ON 
 )
 
@@ -111,7 +112,7 @@ ExternalProject_Add(schnapps
     -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
     -DCMAKE_PREFIX_PATH:PATH=<INSTALL_DIR>
     #-DCMAKE_INSTALL_NAME_DIR:STRING=@executable_path/lib/
-    -DQt5_DIR:PATH=${qt5_dir}
+    -DQt5_DIR:PATH=${myqt5_dir}
  	-DUSE_PLUGIN_attribute_editor:BOOL=OFF
  	-DUSE_PLUGIN_cage_3d_deformation:BOOL=OFF
  	-DUSE_PLUGIN_empty_plugin:BOOL=ON
