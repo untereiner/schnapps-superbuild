@@ -18,9 +18,9 @@ ExternalProject_Add(cgogn
   BINARY_DIR ${CMAKE_BINARY_DIR}/cgogn-build
   INSTALL_DIR ${installDir}
 
-  GIT_REPOSITORY https://github.com/untereiner/CGoGN_2.git
+  GIT_REPOSITORY https://github.com/cgogn/CGoGN_2.git
   GIT_REMOTE_NAME origin
-  GIT_TAG cmake
+  GIT_TAG develop
   CMAKE_ARGS
     -DCMAKE_BUILD_TYPE:STRING=${BUILD_TYPE}
     -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
