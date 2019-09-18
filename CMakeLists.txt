@@ -13,6 +13,8 @@ set(installDir ${CMAKE_CURRENT_BINARY_DIR}/install)
 set(sourceDir ${CMAKE_CURRENT_SOURCE_DIR})
 set(qt5Dir ${Qt5_DIR})
 
+set(toolChain ${CMAKE_TOOLCHAIN_FILE})
+
 ExternalProject_Add(cgogn
   SOURCE_DIR ${sourceDir}/cgogn
   BINARY_DIR ${CMAKE_BINARY_DIR}/cgogn-build
@@ -25,8 +27,9 @@ ExternalProject_Add(cgogn
     -DCMAKE_BUILD_TYPE:STRING=${BUILD_TYPE}
     -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
     -DCMAKE_PREFIX_PATH:PATH=<INSTALL_DIR>
+    -DCMAKE_TOOLCHAIN_FILE:PATH=${toolChain}
     -DQt5_DIR:PATH=${qt5Dir}
-    #-DBUILD_SHARED_LIBS:BOOL=ON 
+    -DCGOGN_MODULE_topology:BOOL=OFF
 )
 
 ExternalProject_Add(schnapps
@@ -34,38 +37,36 @@ ExternalProject_Add(schnapps
   BINARY_DIR ${CMAKE_BINARY_DIR}/schnapps-build
   INSTALL_DIR ${installDir}
 
-  GIT_REPOSITORY https://github.com/untereiner/SCHNApps.git
+  GIT_REPOSITORY https://github.com/cgogn/SCHNApps.git
   GIT_REMOTE_NAME origin
-  GIT_TAG cmake
-  #URL /Users/untereiner/Documents/Developments/cgogn2/SCHNApps/
+  GIT_TAG develop
   CMAKE_ARGS
     -DCMAKE_BUILD_TYPE:STRING=${BUILD_TYPE}
     -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
     -DCMAKE_PREFIX_PATH:PATH=<INSTALL_DIR>
-    #-DCMAKE_INSTALL_NAME_DIR:STRING=@executable_path/lib/
+    -DCMAKE_TOOLCHAIN_FILE:PATH=${toolChain}
     -DQt5_DIR:PATH=${qt5Dir}
    	-DUSE_PLUGIN_attribute_editor:BOOL=ON
    	-DUSE_PLUGIN_cage_3d_deformation:BOOL=OFF
-   	-DUSE_PLUGIN_empty_plugin:BOOL=ON
+   	-DUSE_PLUGIN_cmap_provider:BOOL=ON
    	-DUSE_PLUGIN_export:BOOL=ON
   	-DUSE_PLUGIN_extract_surface:BOOL=OFF
   	-DUSE_PLUGIN_image:BOOL=OFF
   	-DUSE_PLUGIN_import:BOOL=ON
   	-DUSE_PLUGIN_merge:BOOL=OFF
   	-DUSE_PLUGIN_meshgen:BOOL=OFF
-  	-DUSE_PLUGIN_selection:BOOL=ON
-  	-DUSE_PLUGIN_shallow_water:BOOL=OFF
-  	-DUSE_PLUGIN_shallow_water_2:BOOL=OFF
+    -DUSE_PLUGIN_point_set_render:BOOL=ON
+    -DUSE_PLUGIN_polyline_render:BOOL=ON
+    -DUSE_PLUGIN_render_transparency:BOOL=ON
   	-DUSE_PLUGIN_surface_deformation:BOOL=ON
-  	-DUSE_PLUGIN_surface_differential_properqties:BOOL=ON
+  	-DUSE_PLUGIN_surface_differential_properties:BOOL=ON
   	-DUSE_PLUGIN_surface_modelisation:BOOL=OFF
   	-DUSE_PLUGIN_surface_render:BOOL=ON
   	-DUSE_PLUGIN_surface_render_scalar:BOOL=ON
-  	-DUSE_PLUGIN_surface_render_transp:BOOL=ON
   	-DUSE_PLUGIN_surface_render_vector:BOOL=ON
-  	-DUSE_PLUGIN_volume_modelisation:BOOL=OFF
+    -DUSE_PLUGIN_surface_selection:BOOL=ON
   	-DUSE_PLUGIN_volume_render:BOOL=OFF
-    #-DBUILD_SHARED_LIBS:BOOL=ON
+  DEPENDS cgogn
 )
 
 
